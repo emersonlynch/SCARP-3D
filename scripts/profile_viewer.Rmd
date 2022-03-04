@@ -1,0 +1,109 @@
+---
+title: "Profile Viewer"
+output:
+  html_document
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(rgl)
+library(knitr)
+knit_hooks$set(webgl = hook_webgl)
+```
+
+## Instructions
+
+* First, go to this webpage: https://get.webgl.org/ to make sure you have the extension enabled to view the 3D figures. 
+* Scroll to zoom in/out; click and drag to rotate. 
+* Points are numbered and color-coded:
+  + Blue = surveyed as profile
+  + Red = surveyed as scarp midpoint
+  + Yellow = surveyed as scarp face (on straight-line profiles)
+* In the excel file, notate the first and last point you choose for each uphill and downhill segment, as well as any points within that range you'd like to exclude.
+* For the straight-line profiles, notate if you would like to choose a different midpoint than the one I chose in the field. The midpoint should be the steepest part of the scarp face (the point of inflection) - where the fault is most likely to intersect the ground surface.
+
+## Site 2 
+
+
+```{r CL, webgl=TRUE, echo=FALSE,class.source="site2"}
+survey <- read.csv(file="CL.csv", header=TRUE, sep=",") # prepared survey csv or txt file. make sure you are working in the same directory as your profiles
+profile1 = "CL"
+
+profile_plot <- function(survey, profile1) {
+  init_midpt = subset(survey, survey[, 5] == "M") # currently have to choose same midpoint for each person
+  
+  survey$Easting<-(survey$Easting - init_midpt$Easting)
+  survey$Northing<-(survey$Northing - init_midpt$Northing)
+  survey$HAE<-(survey$HAE - init_midpt$HAE)
+  
+  #redefine midpoint as origin
+  midpt = subset(survey,survey[,5] =="M")
+  
+  # define sections of the profile separated by fault strands
+  profile=subset(survey, survey[,5] == "U") # uphill section
+  scarp=subset(survey, survey[,5] == "L") # downhill section
+  
+  #plot the profile in 3D space, with option to click and drag to spin the plot
+  plot3d(x = profile$Easting, y = profile$Northing, z = profile$HAE,aspect="iso",
+         xlab="Easting (m)",ylab="Northing (m)",zlab="Elevation (m)",col="blue",main=profile1)
+  #aspect="iso" means isometric - E/N/Z are all to scale - no vertical exaggeration
+  points3d(x=midpt$Easting,y=midpt$Northing,z=midpt$HAE,col="red")
+  points3d(x=scarp$Easting,y=scarp$Northing,z=scarp$HAE,col="yellow")
+  text3d(x=survey$Easting,y=survey$Northing,z=survey$HAE,survey$Point,pos=4,offset=0.5,cex=0.6)
+}
+profile_plot(survey,profile1)
+bg3d("lightgray")
+```
+**CL** Straight-line profile.
+
+```{r JM_1, webgl=TRUE, echo=FALSE}
+survey <- read.csv(file="JM_1.csv", header=TRUE, sep=",") # prepared survey csv or txt file
+profile1 = "JM_1"
+profile_plot(survey,profile1)
+```
+**JM 1** Straight-line profile.
+
+```{r JM_2_TT, webgl=TRUE, echo=FALSE}
+survey <- read.csv(file="JM_2_TT.csv", header=TRUE, sep=",") # prepared survey csv or txt file
+profile1 = "JM_2_TT"
+profile_plot(survey,profile1)
+```
+**JM 2/TT** Straight-line profile.
+
+```{r KP, webgl=TRUE, echo=FALSE}
+survey <- read.csv(file="KP.csv", header=TRUE, sep=",") # prepared survey csv or txt file
+profile1 = "KP"
+profile_plot(survey,profile1)
+```
+**KP** Straight-line profile.
+
+```{r KPTH, webgl=TRUE, echo=FALSE}
+survey <- read.csv(file="KPTH.csv", header=TRUE, sep=",") # prepared survey csv or txt file
+profile1 = "KPTH"
+profile_plot(survey,profile1)
+```
+**KPTH** Offset active channel.
+
+```{r TH1, webgl=TRUE, echo=FALSE}
+survey <- read.csv(file="TH1.csv", header=TRUE, sep=",") # prepared survey csv or txt file
+profile1 = "TH1"
+profile_plot(survey,profile1)
+```
+**TH 1** Offset abandoned channel.
+
+```{r TH2, webgl=TRUE, echo=FALSE}
+survey <- read.csv(file="TH2.csv", header=TRUE, sep=",") # prepared survey csv or txt file
+profile1 = "TH2"
+profile_plot(survey,profile1)
+```
+**TH 2** Offset abandoned channel.
+
+```{r FWS, webgl=TRUE, echo=FALSE}
+survey <- read.csv(file="FWS.csv", header=TRUE, sep=",") # prepared survey csv or txt file
+profile1 = "FWS"
+profile_plot(survey,profile1)
+```
+**FWS** Straight-line profile.
+
+##repeat these chunks as many times as needed to plot all of your profiles.
