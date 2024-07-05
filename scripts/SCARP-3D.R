@@ -1,8 +1,13 @@
-# 3D offset calculation script
+# SCARP-3D
+# Script Calculating displAcements of lineaR Profiles in 3D
 # Emerson Lynch
-# Last updated March 4, 2022
+# Last updated March 29, 2024
 # cleaned up comments
+# added point uncertainty to linear regression
+
+# Known issues:
 # RL vs LL currently determined by direction of delta easting - ONLY FOR FAULTS WITH SIMILAR ORIENTATIONS AS BRF
+# Currently defines downhill-up as positive dip slip, downhill-down as negative dip slip
 
 ##### Introduction --------
 # this script takes a total station profile along a geomorphic piercing point
@@ -91,6 +96,11 @@ for (val in i){
      
      #redefine midpoint as origin
      midpt = subset(survey, survey[, 5] == "M")
+
+     ## how to add in uncertainty of points? world's clunkiest monte carlo EML 29 Mar 2024
+     new_survey = survey
+     new_survey$Easting <-rnorm(nrow(survey),survey$Easting,survey$E.error)
+     new_survey$Northing <-rnorm(nrow(survey),survey$Northing,survey$N.error)
      
     # #plot the profile in 3D space, with option to click and drag to spin the plot
     # plot3d(x = survey$Easting, y = survey$Northing, z = survey$HAE,aspect="iso",

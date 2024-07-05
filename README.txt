@@ -1,8 +1,9 @@
-README for 3D offset calculations
+README for SCARP-3D
+Script Calculating displAcements of lineaR Profiles in 3D
 By Emerson Lynch
-Updated March 4, 2022
+Updated July 5, 2024
 
-This repository contains everything needed to recreate the 3D offset calculations of Lynch et al. (in prep)
+This repository contains everything needed to recreate the 3D offset calculations of Lynch et al. (in revision)
 
 In order to calculate the 3D offset of your own geomorphic piercing points, you need
 1) topographic profiles as XYZ points (can be surveyed in the field or extracted from a DEM)
@@ -15,6 +16,6 @@ To account for the uncertainty in profile selection, I had other members of my l
 >> knit to html to share with others
 >> instructions are included for others to install the required tools for viewing the 3D plots
 
-The script to calculate 3D offset is here: 3d_regression.R
+The script to calculate 3D offset is here: SCARP-3D.R
 
 I have included the raw profiles and subgroups of fault midpoints included in my paper as txt files in the [topo-profiles] and [fault-midpoints] folders
